@@ -1,0 +1,17 @@
+import 'package:flutter/material.dart';
+
+class CatalogScreen extends StatelessWidget {
+  const CatalogScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Katalog Kegiatan Publik'),
+      ),
+      body: const Center(
+        child: Text('Katalog Acara REST API (Segera dihubungkan)'),
+      ),
+    );
+  }
+}
