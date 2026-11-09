@@ -1,17 +1,35 @@
-# uts_2415051090_iketutbagusbrihaspati
+# EventHub - Campus Activity Manager
+Proyek Ujian Tengah Semester (UTS) Pengembangan Aplikasi Mobile  
+Program Studi Pendidikan Teknik Informatika (PTI), Fakultas Teknik dan Kejuruan  
+Universitas Pendidikan Ganesha (Undiksha) - 2026
 
-A new Flutter project.
+---
 
-## Getting Started
+## 📌 Identitas Mahasiswa
+* **Nama**: I Ketut Bagus Brihaspati
+* **NIM**: 2415051090
+* **Kelas**: PTI 5A
+* **Mata Kuliah**: Pemrograman Mobile
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 📱 Ringkasan Aplikasi
+**EventHub** adalah aplikasi manajemen kegiatan kampus multi-platform yang dibangun menggunakan Flutter, Provider, REST API, dan PostgreSQL Supabase. Aplikasi ini memungkinkan mahasiswa memantau katalog seminar, workshop, festival, dan lomba kampus, serta mengelola catatan dan agenda kepanitiaan personal secara terstruktur.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Fitur Utama:
+1. **Dashboard & Statistik (HomeScreen)**: Ringkasan cepat jumlah agenda publik dan agenda aktif pengguna.
+2. **Katalog Kegiatan Publik (CatalogScreen)**: Mengonsumsi data kegiatan kampus dari REST API dengan fitur pencarian teks dan filter chip kategori.
+3. **Detail Kegiatan (EventDetailScreen)**: Informasi mendalam tentang acara, lokasi, poster, penyelenggara, dan tombol pendaftaran langsung.
+4. **Agenda Saya (MyScheduleScreen)**: Menampilkan riwayat agenda tersimpan dari database Supabase secara real-time.
+5. **Form Catat & Tambah Agenda (AddEventScreen)**: Validasi form lengkap untuk mencatat peran (Peserta/Panitia/Koordinator), tanggal, status, dan catatan persiapan.
+6. **Edit & Manajemen Status (EditEventScreen)**: Fitur pembaharuan data (Update) dan hapus agenda (Delete) yang disertai dialog konfirmasi modal.
+7. **Navigasi Adaptif (Responsive Layout)**: Menggunakan `NavigationBar` untuk perangkat ponsel (<600px) dan beralih otomatis ke `NavigationRail` pada tablet atau layar lebar (≥840px).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🏗️ Arsitektur & Sumber Data
+
+Aplikasi menerapkan pola **Clean Layered Architecture**:
+```text
+UI Screens ──> State Management (Provider) ──> Repository Layer ──┬──> REST API Service (HTTP)
+                                                                  └──> Database Service (Supabase)
