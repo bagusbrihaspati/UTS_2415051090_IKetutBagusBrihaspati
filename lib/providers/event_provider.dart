@@ -95,4 +95,22 @@ class EventProvider extends ChangeNotifier {
   bool isEventRegistered(String eventId) {
     return _myScheduleEvents.any((e) => e.eventId == eventId);
   }
+
+// Tambahkan method ini di dalam class EventProvider:
+  Future<void> fetchMySchedule() async {
+    _isScheduleLoading = true;
+    _scheduleError = null;
+    notifyListeners();
+
+    try {
+      final data = await _eventRepository.getRegisteredEvents();
+      _myScheduleEvents = data;
+      _scheduleError = null;
+    } catch (e) {
+      _scheduleError = 'Gagal memuat agenda: $e';
+    } finally {
+      _isScheduleLoading = false;
+      notifyListeners();
+    }
+  }
 }
