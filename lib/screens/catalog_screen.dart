@@ -239,3 +239,5 @@ class _EventCatalogCard extends StatelessWidget {
     );
   }
 }
+
+// Interaction: Search bar, category filter chips, and dialog feedback
