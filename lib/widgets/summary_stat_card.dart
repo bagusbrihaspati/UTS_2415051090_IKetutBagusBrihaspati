@@ -25,7 +25,7 @@ class SummaryStatCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 22,
-              backgroundColor: color.withOpacity(0.15),
+              backgroundColor: color.withValues(alpha: 0.15),
               child: Icon(icon, color: color, size: 24),
             ),
             const SizedBox(width: 12),

@@ -33,7 +33,7 @@ class StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: text.withOpacity(0.3)),
+        border: Border.all(color: text.withValues(alpha: 0.3)),
       ),
       child: Text(
         label,

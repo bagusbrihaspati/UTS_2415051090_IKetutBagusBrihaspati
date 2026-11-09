@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/event_provider.dart';
 import 'screens/main_navigation_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const EventHubApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => EventProvider()),
+      ],
+      child: const EventHubApp(),
+    ),
+  );
 }
 
 class EventHubApp extends StatelessWidget {

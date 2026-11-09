@@ -94,7 +94,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           ListTile(
-            tileColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.4),
+            tileColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             leading: const Icon(Icons.explore, color: Colors.deepPurple),
             title: const Text('Jelajahi Katalog Kegiatan'),
@@ -104,7 +104,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           ListTile(
-            tileColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.4),
+            tileColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             leading: const Icon(Icons.calendar_month, color: Colors.teal),
             title: const Text('Kelola Catatan & Agenda Pribadi'),
