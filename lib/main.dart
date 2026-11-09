@@ -41,4 +41,6 @@ class EventHubApp extends StatelessWidget {
       home: const MainNavigationScreen(),
     );
   }
-}
+} 
+
+// Polishing: EventHub Clean Architecture & Production Theme Config
