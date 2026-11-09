@@ -4,6 +4,7 @@ import '../models/registered_event.dart';
 import '../providers/event_provider.dart';
 import '../widgets/status_badge.dart';
 import '../widgets/state_feedback_widget.dart';
+import 'add_event_screen.dart';
 
 class MyScheduleScreen extends StatefulWidget {
   const MyScheduleScreen({super.key});
@@ -17,6 +18,7 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       final provider = Provider.of<EventProvider>(context, listen: false);
       if (provider.myScheduleEvents.isEmpty) {
         provider.fetchMySchedule();
@@ -53,12 +55,22 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
             : ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: provider.myScheduleEvents.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final item = provider.myScheduleEvents[index];
                   return _RegisteredEventCard(item: item);
                 },
               ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddEventScreen()),
+          );
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Catat Kegiatan'),
       ),
     );
   }

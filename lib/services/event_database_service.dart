@@ -14,4 +14,14 @@ class EventDatabaseService {
     final List<dynamic> data = response as List<dynamic>;
     return data.map((json) => RegisteredEvent.fromJson(json)).toList();
   }
+
+  Future<RegisteredEvent> insertEvent(RegisteredEvent event) async {
+    final response = await _client
+        .from('registered_events')
+        .insert(event.toJson())
+        .select()
+        .single();
+
+    return RegisteredEvent.fromJson(response);
+  }
 }

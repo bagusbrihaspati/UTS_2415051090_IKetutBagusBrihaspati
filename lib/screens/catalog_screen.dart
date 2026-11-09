@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/campus_event.dart';
 import '../providers/event_provider.dart';
 import '../widgets/state_feedback_widget.dart';
+import 'add_event_screen.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -18,6 +19,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       final provider = Provider.of<EventProvider>(context, listen: false);
       if (provider.catalogEvents.isEmpty) {
         provider.fetchCatalogFromApi();
@@ -48,7 +50,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
       ),
       body: Column(
         children: [
-          // 1. Search Bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
@@ -75,8 +76,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
               onChanged: (val) => provider.setSearchQuery(val),
             ),
           ),
-
-          // 2. Filter Kategori Chip
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -95,8 +94,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
           ),
           const SizedBox(height: 8),
-
-          // 3. Grid / List Responsif dengan State Feedback
           Expanded(
             child: StateFeedbackWidget(
               isLoading: provider.isCatalogLoading,
@@ -151,23 +148,22 @@ class _EventCatalogCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Detail ${event.title} (Akan dibuka di Milestone Detail)'),
-              duration: const Duration(seconds: 1),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AddEventScreen(initialEvent: event),
             ),
           );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar Banner
             Expanded(
               child: Image.network(
                 event.imageUrl,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (context, error, stackTrace) => Container(
                   color: Colors.deepPurple.shade100,
                   child: const Center(
                     child: Icon(Icons.event, size: 48, color: Colors.deepPurple),
@@ -175,7 +171,6 @@ class _EventCatalogCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Informasi Event
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(

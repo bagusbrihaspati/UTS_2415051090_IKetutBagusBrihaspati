@@ -22,4 +22,8 @@ class EventRepository {
   Future<List<RegisteredEvent>> getRegisteredEvents() async {
     return await _dbService.getRegisteredEvents();
   }
+
+  Future<RegisteredEvent> addRegisteredEvent(RegisteredEvent event) async {
+    return await _dbService.insertEvent(event);
+  }
 }

@@ -7,10 +7,10 @@ import 'screens/main_navigation_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inisialisasi Supabase menggunakan project praktikum Anda
   await Supabase.initialize(
     url: 'https://znrjokqbhjmyfafrsqpa.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpucmpva3FiaGpteWZhZnJzcXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwNDkxNTksImV4cCI6MjA1NTYyNTE1OX0.qX3sKx-51qB_pA2wX0xR3aY4c1rT_b7h9Qv8w6n9fEk',
+    publishableKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpucmpva3FiaGpteWZhZnJzcXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwNDkxNTksImV4cCI6MjA1NTYyNTE1OX0.qX3sKx-51qB_pA2wX0xR3aY4c1rT_b7h9Qv8w6n9fEk',
   );
 
   runApp(

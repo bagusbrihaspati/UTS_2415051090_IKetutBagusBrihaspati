@@ -113,4 +113,25 @@ class EventProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> addEventToSchedule(RegisteredEvent event) async {
+    _isScheduleLoading = true;
+    _scheduleError = null;
+    notifyListeners();
+
+    try {
+      final newEvent = await _eventRepository.addRegisteredEvent(event);
+      _myScheduleEvents.insert(0, newEvent);
+      _scheduleError = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _scheduleError = 'Gagal menyimpan kegiatan: $e';
+      notifyListeners();
+      return false;
+    } finally {
+      _isScheduleLoading = false;
+      notifyListeners();
+    }
+  }
 }
