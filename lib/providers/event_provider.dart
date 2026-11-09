@@ -6,19 +6,19 @@ import '../repositories/event_repository.dart';
 class EventProvider extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
 
-  // 1. State untuk Katalog Kegiatan Publik (REST API)
+  // State Katalog Kegiatan Publik (REST API)
   List<CampusEvent> _catalogEvents = [];
   bool _isCatalogLoading = false;
   String? _catalogError;
   String _selectedCategory = 'Semua';
   String _searchQuery = '';
 
-  // 2. State untuk Agenda Pribadi (Supabase Database)
+  // State Agenda Pribadi (Supabase Database)
   List<RegisteredEvent> _myScheduleEvents = [];
   bool _isScheduleLoading = false;
   String? _scheduleError;
 
-  // --- Getters ---
+  // Getters
   List<CampusEvent> get catalogEvents => _catalogEvents;
   bool get isCatalogLoading => _isCatalogLoading;
   String? get catalogError => _catalogError;
@@ -29,7 +29,6 @@ class EventProvider extends ChangeNotifier {
   bool get isScheduleLoading => _isScheduleLoading;
   String? get scheduleError => _scheduleError;
 
-  // Filter gabungan kategori & pencarian untuk Katalog Event
   List<CampusEvent> get filteredCatalogEvents {
     return _catalogEvents.where((event) {
       final matchesCategory = _selectedCategory == 'Semua' ||
@@ -43,7 +42,7 @@ class EventProvider extends ChangeNotifier {
     }).toList();
   }
 
-  // --- REST API Fetcher (Milestone 8) ---
+  // REST API Fetcher
   Future<void> fetchCatalogFromApi() async {
     _isCatalogLoading = true;
     _catalogError = null;
@@ -61,42 +60,7 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  // --- Mutators & Filter Handlers ---
-  void setCategory(String category) {
-    _selectedCategory = category;
-    notifyListeners();
-  }
-
-  void setSearchQuery(String query) {
-    _searchQuery = query;
-    notifyListeners();
-  }
-
-  // Setters State Agenda Pribadi (Supabase)
-  void setScheduleLoading(bool loading) {
-    _isScheduleLoading = loading;
-    _scheduleError = null;
-    notifyListeners();
-  }
-
-  void setScheduleData(List<RegisteredEvent> events) {
-    _myScheduleEvents = events;
-    _isScheduleLoading = false;
-    _scheduleError = null;
-    notifyListeners();
-  }
-
-  void setScheduleError(String error) {
-    _scheduleError = error;
-    _isScheduleLoading = false;
-    notifyListeners();
-  }
-
-  bool isEventRegistered(String eventId) {
-    return _myScheduleEvents.any((e) => e.eventId == eventId);
-  }
-
-// Tambahkan method ini di dalam class EventProvider:
+  // Supabase READ
   Future<void> fetchMySchedule() async {
     _isScheduleLoading = true;
     _scheduleError = null;
@@ -114,6 +78,7 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
+  // Supabase CREATE
   Future<bool> addEventToSchedule(RegisteredEvent event) async {
     _isScheduleLoading = true;
     _scheduleError = null;
@@ -122,16 +87,64 @@ class EventProvider extends ChangeNotifier {
     try {
       final newEvent = await _eventRepository.addRegisteredEvent(event);
       _myScheduleEvents.insert(0, newEvent);
-      _scheduleError = null;
-      notifyListeners();
       return true;
     } catch (e) {
-      _scheduleError = 'Gagal menyimpan kegiatan: $e';
-      notifyListeners();
+      _scheduleError = 'Gagal menyimpan: $e';
       return false;
     } finally {
       _isScheduleLoading = false;
       notifyListeners();
     }
+  }
+
+  // Supabase UPDATE (Milestone 11)
+  Future<bool> updateScheduleEvent(RegisteredEvent updated) async {
+    _isScheduleLoading = true;
+    _scheduleError = null;
+    notifyListeners();
+
+    try {
+      final result = await _eventRepository.updateRegisteredEvent(updated);
+      final index = _myScheduleEvents.indexWhere((e) => e.id == result.id);
+      if (index != -1) {
+        _myScheduleEvents[index] = result;
+      }
+      return true;
+    } catch (e) {
+      _scheduleError = 'Gagal memperbarui: $e';
+      return false;
+    } finally {
+      _isScheduleLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Supabase DELETE (Milestone 12)
+  Future<bool> deleteScheduleEvent(int id) async {
+    _isScheduleLoading = true;
+    _scheduleError = null;
+    notifyListeners();
+
+    try {
+      await _eventRepository.deleteRegisteredEvent(id);
+      _myScheduleEvents.removeWhere((e) => e.id == id);
+      return true;
+    } catch (e) {
+      _scheduleError = 'Gagal menghapus: $e';
+      return false;
+    } finally {
+      _isScheduleLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void setCategory(String category) {
+    _selectedCategory = category;
+    notifyListeners();
+  }
+
+  void setSearchQuery(String query) {
+    _searchQuery = query;
+    notifyListeners();
   }
 }

@@ -18,12 +18,16 @@ class EventRepository {
     return await _apiService.fetchEvents();
   }
 
-  // Supabase Database (READ)
-  Future<List<RegisteredEvent>> getRegisteredEvents() async {
-    return await _dbService.getRegisteredEvents();
-  }
+  // Supabase Database CRUD
+  Future<List<RegisteredEvent>> getRegisteredEvents() async =>
+      await _dbService.getRegisteredEvents();
 
-  Future<RegisteredEvent> addRegisteredEvent(RegisteredEvent event) async {
-    return await _dbService.insertEvent(event);
-  }
+  Future<RegisteredEvent> addRegisteredEvent(RegisteredEvent event) async =>
+      await _dbService.insertEvent(event);
+
+  Future<RegisteredEvent> updateRegisteredEvent(RegisteredEvent event) async =>
+      await _dbService.updateEvent(event);
+
+  Future<void> deleteRegisteredEvent(int id) async =>
+      await _dbService.deleteEvent(id);
 }
