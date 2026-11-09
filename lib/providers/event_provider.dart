@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/campus_event.dart';
 import '../models/registered_event.dart';
+import '../repositories/event_repository.dart';
 
 class EventProvider extends ChangeNotifier {
+  final EventRepository _eventRepository = EventRepository();
+
   // 1. State untuk Katalog Kegiatan Publik (REST API)
   List<CampusEvent> _catalogEvents = [];
   bool _isCatalogLoading = false;
@@ -40,6 +43,24 @@ class EventProvider extends ChangeNotifier {
     }).toList();
   }
 
+  // --- REST API Fetcher (Milestone 8) ---
+  Future<void> fetchCatalogFromApi() async {
+    _isCatalogLoading = true;
+    _catalogError = null;
+    notifyListeners();
+
+    try {
+      final data = await _eventRepository.getCampusEvents();
+      _catalogEvents = data;
+      _catalogError = null;
+    } catch (e) {
+      _catalogError = 'Gagal memuat katalog: $e';
+    } finally {
+      _isCatalogLoading = false;
+      notifyListeners();
+    }
+  }
+
   // --- Mutators & Filter Handlers ---
   void setCategory(String category) {
     _selectedCategory = category;
@@ -51,27 +72,7 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Setters State Katalog (akan dipanggil oleh Service REST API di Milestone 8)
-  void setCatalogLoading(bool loading) {
-    _isCatalogLoading = loading;
-    _catalogError = null;
-    notifyListeners();
-  }
-
-  void setCatalogData(List<CampusEvent> events) {
-    _catalogEvents = events;
-    _isCatalogLoading = false;
-    _catalogError = null;
-    notifyListeners();
-  }
-
-  void setCatalogError(String error) {
-    _catalogError = error;
-    _isCatalogLoading = false;
-    notifyListeners();
-  }
-
-  // Setters State Agenda Pribadi (akan dipanggil oleh Supabase Service di Milestone 9-12)
+  // Setters State Agenda Pribadi (Supabase)
   void setScheduleLoading(bool loading) {
     _isScheduleLoading = loading;
     _scheduleError = null;
@@ -91,7 +92,6 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Helper State: cek apakah suatu event dari katalog sudah terdaftar di agenda
   bool isEventRegistered(String eventId) {
     return _myScheduleEvents.any((e) => e.eventId == eventId);
   }
