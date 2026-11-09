@@ -33,3 +33,6 @@ Aplikasi menerapkan pola **Clean Layered Architecture**:
 ```text
 UI Screens ──> State Management (Provider) ──> Repository Layer ──┬──> REST API Service (HTTP)
                                                                   └──> Database Service (Supabase)
+
+---
+*Status: All 6 screens tested, 16 git commits verified, ready for submission.*
