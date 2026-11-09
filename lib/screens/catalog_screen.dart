@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/campus_event.dart';
 import '../providers/event_provider.dart';
 import '../widgets/state_feedback_widget.dart';
-import 'add_event_screen.dart';
+import 'event_detail_screen.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -50,6 +50,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
       ),
       body: Column(
         children: [
+          // 1. Search Bar (Milestone 13)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
@@ -76,6 +77,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
               onChanged: (val) => provider.setSearchQuery(val),
             ),
           ),
+
+          // 2. Filter Kategori Chip (Milestone 13)
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -94,6 +97,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
           ),
           const SizedBox(height: 8),
+
+          // 3. Grid / List Responsif dengan Navigasi ke Detail
           Expanded(
             child: StateFeedbackWidget(
               isLoading: provider.isCatalogLoading,
@@ -103,7 +108,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
               child: provider.filteredCatalogEvents.isEmpty
                   ? const Center(
                       child: Text(
-                        'Tidak ada kegiatan yang sesuai filter.',
+                        'Tidak ada kegiatan yang sesuai filter pencarian.',
                         style: TextStyle(color: Colors.grey),
                       ),
                     )
@@ -112,8 +117,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         final isWide = constraints.maxWidth >= 600;
                         return GridView.builder(
                           padding: const EdgeInsets.all(16.0),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: isWide ? 2 : 1,
                             mainAxisExtent: 280,
                             crossAxisSpacing: 16,
@@ -148,10 +152,11 @@ class _EventCatalogCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: () {
+          // Buka Screen Detail Acara (Milestone 14)
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddEventScreen(initialEvent: event),
+              builder: (_) => EventDetailScreen(event: event),
             ),
           );
         },
@@ -163,7 +168,7 @@ class _EventCatalogCard extends StatelessWidget {
                 event.imageUrl,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
+                errorBuilder: (_, __, ___) => Container(
                   color: Colors.deepPurple.shade100,
                   child: const Center(
                     child: Icon(Icons.event, size: 48, color: Colors.deepPurple),
@@ -180,12 +185,9 @@ class _EventCatalogCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primaryContainer,
+                          color: Theme.of(context).colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -193,16 +195,13 @@ class _EventCatalogCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
                           ),
                         ),
                       ),
                       Text(
                         event.date,
-                        style: const TextStyle(
-                            fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -226,8 +225,7 @@ class _EventCatalogCard extends StatelessWidget {
                           event.location,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.grey),
+                          style: const TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ),
                     ],

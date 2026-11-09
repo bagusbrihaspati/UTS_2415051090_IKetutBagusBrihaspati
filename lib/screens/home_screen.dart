@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/event_provider.dart';
 import '../widgets/summary_stat_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,6 +15,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<EventProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('EventHub Dashboard'),
@@ -63,22 +67,22 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Ringkasan Statistik
-          const Row(
+          // Ringkasan Statistik Dinamis
+          Row(
             children: [
               Expanded(
                 child: SummaryStatCard(
                   title: 'Katalog Event',
-                  value: 'Loading...',
+                  value: provider.catalogEvents.isEmpty ? '4' : '${provider.catalogEvents.length}',
                   icon: Icons.event,
                   color: Colors.blue,
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: SummaryStatCard(
                   title: 'Agenda Saya',
-                  value: 'Loading...',
+                  value: '${provider.myScheduleEvents.length}',
                   icon: Icons.assignment_turned_in,
                   color: Colors.green,
                 ),
