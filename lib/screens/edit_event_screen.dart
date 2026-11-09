@@ -204,3 +204,5 @@ class _EditEventScreenState extends State<EditEventScreen> {
     );
   }
 }
+
+// Feature: Update personal schedule and notes
